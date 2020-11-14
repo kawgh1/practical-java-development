@@ -4,17 +4,20 @@ import java.util.concurrent.BlockingQueue;
 
 public class Producer implements Runnable {
 
+    String name;
     int questionNumber;
 
     BlockingQueue<Integer> questionQueue;
 
-    public Producer(BlockingQueue<Integer> questionQueue) {
+    public Producer(String name, BlockingQueue<Integer> questionQueue) {
+        this.name = name;
         this.questionQueue = questionQueue;
 
     }
 
     @Override
     public void run() {
+        Thread.currentThread().setName(this.name);
 
         while(true){
             // if we had multiple Producer Threads we would want this questionNumber++
@@ -26,8 +29,10 @@ public class Producer implements Runnable {
             // now we are 100% thread safe, even with multiple Producers using a single synchronized block
             try {
                 synchronized (this) {
+                    Thread.sleep(1000); // delay to simulate answering question
                     int nextQuestion = questionNumber++;
-                    System.out.println("Got new Question:  " + nextQuestion);
+                    System.out.println("New Question asked by " +
+                            Thread.currentThread().getName() + ":  " + nextQuestion);
                     questionQueue.put(nextQuestion); // use put() not add(), add() is not thread safe
                 }
 
