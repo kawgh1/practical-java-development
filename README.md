@@ -1,0 +1,1 @@
+Basic Java Development examples - collections, generics, threading, JDBC, lambdas, streams, etc. 
